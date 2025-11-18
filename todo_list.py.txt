@@ -1,0 +1,108 @@
+import os
+
+# ==========================
+#  TO-DO LIST APPLICATION
+#  Người học + AI cùng xây dựng
+# ==========================
+
+DATA_FILE = "tasks.txt"
+
+
+# --------------------------
+# Load tasks from file
+# --------------------------
+def load_tasks():
+    tasks = []
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            tasks = [line.strip() for line in f.readlines()]
+    return tasks
+
+
+# --------------------------
+# Save tasks to file
+# --------------------------
+def save_tasks(tasks):
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        for task in tasks:
+            f.write(task + "\n")
+
+
+# --------------------------
+# Display tasks
+# --------------------------
+def show_tasks(tasks):
+    if not tasks:
+        print("\n📭 Danh sách công việc đang trống.\n")
+        return
+
+    print("\n📌 DANH SÁCH CÔNG VIỆC:")
+    for i, task in enumerate(tasks, start=1):
+        print(f"{i}. {task}")
+    print()
+
+
+# --------------------------
+# Add new task
+# --------------------------
+def add_task(tasks):
+    new_task = input("\nNhập công việc mới: ").strip()
+    if new_task:
+        tasks.append(new_task)
+        save_tasks(tasks)
+        print("✅ Đã thêm công việc!\n")
+    else:
+        print("⚠️ Công việc không được để trống.\n")
+
+
+# --------------------------
+# Delete a task
+# --------------------------
+def delete_task(tasks):
+    show_tasks(tasks)
+    if not tasks:
+        return
+
+    try:
+        index = int(input("Nhập số thứ tự công việc cần xoá: "))
+        if 1 <= index <= len(tasks):
+            removed = tasks.pop(index - 1)
+            save_tasks(tasks)
+            print(f"🗑️ Đã xoá: {removed}\n")
+        else:
+            print("⚠️ Số thứ tự không hợp lệ.\n")
+    except ValueError:
+        print("⚠️ Vui lòng nhập số.\n")
+
+
+# --------------------------
+# Main menu
+# --------------------------
+def main():
+    tasks = load_tasks()
+
+    while True:
+        print("========== TO-DO LIST ==========")
+        print("1. Xem danh sách công việc")
+        print("2. Thêm công việc")
+        print("3. Xoá công việc")
+        print("4. Thoát chương trình")
+        print("================================")
+
+        choice = input("Chọn chức năng (1-4): ")
+
+        if choice == "1":
+            show_tasks(tasks)
+        elif choice == "2":
+            add_task(tasks)
+        elif choice == "3":
+            delete_task(tasks)
+        elif choice == "4":
+            print("\n👋 Tạm biệt! Chúc bạn một ngày năng suất!\n")
+            break
+        else:
+            print("⚠️ Lựa chọn không hợp lệ, vui lòng thử lại.\n")
+
+
+if __name__ == "__main__":
+    main()
